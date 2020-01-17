@@ -1,0 +1,15 @@
+<div class="main">
+  <h3>Svi taskovi korisnika: demo</h3>
+    <section class="signup">
+      <div class="container">
+        <div class="signup-content">
+          <table>
+            <tr *ngFor="let task of tasks"> 
+              <td>{{task.name}}</td>
+              <td><button (click)="resiTask(task.taskId, task.name)"> Show task</button></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </section>
+</div>

@@ -1,0 +1,13 @@
+<div>
+  <form #f="ngForm" (ngSubmit)="onSubmit(f.value, f)" ngNativeValidate>
+  
+    <div *ngFor="let field of formFields" >
+        <label for={{field.id}}>{{field.label}}</label>
+  
+        <input type="text" name={{field.id}} ngModel  *ngIf="field.type.name=='string'" >
+        
+    </div>
+    
+    <input type="submit" value="Potvrdi">
+  </form>
+</div>
