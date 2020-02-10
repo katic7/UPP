@@ -21,6 +21,10 @@ export class UserService {
     return this.http.get("http://localhost:8080/welcome/getUserTask/"+pid);
   }
 
+  getUserTask2(pid):Observable<any>{
+    return this.http.get("http://localhost:8080/welcome/getUserTask2/"+pid);
+  }
+
   aktivacijaKor(user, taskId):Observable<any> {
     return this.http.post("http://localhost:8080/welcome/post/"+taskId +'/aktivacijaKor', user);
   }

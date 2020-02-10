@@ -1,10 +1,13 @@
 package root.demo.model;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 @Entity
 public class NaucnaOblast {
@@ -15,6 +18,9 @@ public class NaucnaOblast {
 	
 	@Column
 	private String naziv;
+	
+	@OneToMany(mappedBy="naucnaOblast")
+	private List<Rad> rad;
 	
 	public NaucnaOblast() {
 		
@@ -34,6 +40,14 @@ public class NaucnaOblast {
 
 	public void setNaziv(String naziv) {
 		this.naziv = naziv;
+	}
+
+	public List<Rad> getRad() {
+		return rad;
+	}
+
+	public void setRad(List<Rad> rad) {
+		this.rad = rad;
 	}
 	
 	

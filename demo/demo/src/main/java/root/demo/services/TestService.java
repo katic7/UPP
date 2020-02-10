@@ -25,6 +25,8 @@ import org.springframework.stereotype.Service;
 import root.demo.dto.FormSubmissionDto;
 import root.demo.model.Korisnik;
 import root.demo.model.NaucnaOblast;
+import root.demo.model.Role;
+import root.demo.model.RoleName;
 import root.demo.model.Roles;
 import root.demo.repository.KorisnikRepository;
 import root.demo.repository.NaucnaOblastRepository;
@@ -54,7 +56,7 @@ public class TestService implements JavaDelegate{
 	@Override
 	public void execute(DelegateExecution execution) throws Exception {
 		 String var = "Pera";
-		 Set<Roles> roles = new HashSet<Roles>();
+		 Set<Role> roles = new HashSet<Role>();
 		 Korisnik kor = new Korisnik();
 		 Set<NaucnaOblast> nc = new HashSet<NaucnaOblast>();
 		 String processInstanceId = execution.getProcessInstanceId();
@@ -66,7 +68,7 @@ public class TestService implements JavaDelegate{
 	      for (FormSubmissionDto formField : registration) {
 			if(formField.getFieldId().equals("kor_ime")) {
 				user.setId(formField.getFieldValue());
-				kor.setKor_ime(formField.getFieldValue());
+				kor.setusername(formField.getFieldValue());
 			}
 			if(formField.getFieldId().equals("naucne_oblasti")) {
 				for(String str:formField.getEnumi()) {
@@ -78,7 +80,7 @@ public class TestService implements JavaDelegate{
 			}
 			if(formField.getFieldId().equals("lozinka")) {
 				user.setPassword(formField.getFieldValue());
-				kor.setLozinka(formField.getFieldValue());
+				kor.setpassword(formField.getFieldValue());
 			}
 			if(formField.getFieldId().equals("ime")) {
 				kor.setIme(formField.getFieldValue());
@@ -99,17 +101,19 @@ public class TestService implements JavaDelegate{
 				kor.setEmail(formField.getFieldValue());
 			}
 			if(formField.getFieldId().equals("recezent")){
-				if(formField.getFieldValue().equals("true"))
-				kor.setHoce_rec(true);
-				runtimeService.setVariable(processInstanceId, "recezent", "true");
-			}else {
-				kor.setHoce_rec(false);
-				runtimeService.setVariable(processInstanceId, "recezent", "false");
+				System.out.println("USAO"+formField.getFieldValue());
+				if(formField.getFieldValue().equals("true")) {
+					kor.setHoce_rec(true);
+					runtimeService.setVariable(processInstanceId, "recezent", "true");
+				}else {
+					kor.setHoce_rec(false);
+					runtimeService.setVariable(processInstanceId, "recezent", "false");
+				}
 			}
 	      }
 	      String act_code = RandomStringUtils.randomAlphanumeric(17).toUpperCase();
 		  kor.setAkt_kod(act_code);
-		  roles.add(roleRepo.getRoleByName("STANDARD"));
+		  roles.add(roleRepo.findByName(RoleName.USER));
 		  kor.setRoles(roles);
 		  kor.setNoblasti(nc);
 		  kor.setAktiviran(false);
@@ -117,6 +121,7 @@ public class TestService implements JavaDelegate{
 	      identityService.saveUser(user);
 	      
 	      sendEmail(kor.getEmail(), kor.getAkt_kod());
+	      
 	}
 	
 	private void sendEmail(String emailOfUser, String linkUrl) throws MessagingException, UnsupportedEncodingException {

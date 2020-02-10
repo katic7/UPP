@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import root.demo.dto.CasopisDto;
 import root.demo.dto.FormFieldsDto;
 import root.demo.dto.KorisnikDto;
 import root.demo.dto.NacinPlacanjaDto;
@@ -19,6 +20,7 @@ import root.demo.model.Casopis;
 import root.demo.model.Korisnik;
 import root.demo.model.NacinPlacanja;
 import root.demo.model.NaucnaOblast;
+import root.demo.model.Role;
 import root.demo.model.Roles;
 import root.demo.repository.CasopisRepositoy;
 import root.demo.repository.KorisnikRepository;
@@ -66,7 +68,7 @@ public class CasopisController {
 		List<Korisnik> korisnici = korRepo.findAll();
 		for(Korisnik kor : korisnici) {
 			boolean flag = false;
-			for(Roles ro : kor.getRoles()){
+			for(Role ro : kor.getRoles()){
 				if(ro.getName().equals(rola)) {
 					flag = true;
 					break;
@@ -116,5 +118,20 @@ public class CasopisController {
 			lista.add(ncdto);
 		}
 		return lista;
+	}
+	
+	@GetMapping(path = "/getAll", produces = "application/json")
+	public @ResponseBody List<CasopisDto> getAllCasopis(){
+		List<CasopisDto> retVal = new ArrayList<CasopisDto>();
+		List<Casopis> cas = casRepo.findAll();
+		for(Casopis c:cas) {
+			if(c.isAktivan()) {
+				CasopisDto cDto = new CasopisDto();
+				cDto.setId(c.getId());
+				cDto.setNaziv(c.getNaziv());
+				retVal.add(cDto);
+			}
+		}
+		return retVal;
 	}
 }

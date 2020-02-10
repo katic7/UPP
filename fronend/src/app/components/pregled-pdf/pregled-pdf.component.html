@@ -1,0 +1,21 @@
+<div>
+  <form #f="ngForm" (ngSubmit)="onSubmit(f.value, f)" ngNativeValidate>
+  
+    <div *ngFor="let field of formFields" >
+        <label for={{field.id}}>{{field.label}}</label>
+  
+        <input type="text" name={{field.id}} ngModel placeholder="{{field.defaultValue}}" *ngIf="field.type.name=='string'&& field.id !='pdf_rada'" >
+        <!--<input type="button" name={{field.id}} ngModel placeholder="{{field.defaultValue}}" *ngIf="field.type.name=='string'&& field.id =='pdf_rada'" >
+        --><input type="checkbox" name={{field.id}} ngModel  *ngIf="field.type.name=='boolean'">
+        <input type="number" name={{field.id}} ngModel *ngIf="field.type.name=='long'">
+        <input type="button" (click)="openPdf(field.value.value)" *ngIf="field.type.name=='string' && field.id=='pdf_rada'" value="Otvori PDF">
+        <select name="field.id" *ngIf="field.type.name=='enum'">
+          <option *ngFor="let val of enumValues" value={{val}}>
+            {{field.type.values[val]}}
+          </option>
+        </select>
+    </div>
+    
+    <input type="submit" value="Potvrdi">
+  </form>
+</div>

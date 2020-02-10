@@ -1,6 +1,7 @@
 package root.demo.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
@@ -34,6 +35,7 @@ public class AktiviranjeKor implements JavaDelegate{
 	      }
 	      System.out.println("AKTIVIRACNJE KOR " + mail);
 	      Korisnik k = korRepo.findOneByEmail(mail);
+	      
 	      //Korisnik k = korRepo.getOne(Long.parseLong("1"));
 	      if(k.getAkt_kod().equals(ver)){
 	    	  k.setAktiviran(true);

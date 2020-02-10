@@ -45,6 +45,9 @@ public class Casopis {
 	@OneToMany(mappedBy = "urednikNOCas")
 	private List<Korisnik> uredniciNO;
 	
+	@OneToMany(mappedBy="casopis")
+	private List<Rad> rad;
+	
 	@ManyToMany
 	@JoinTable(name="recezenti_casopisa",
 	joinColumns = @JoinColumn(name="casopis_id", referencedColumnName="id"),
@@ -131,6 +134,14 @@ public class Casopis {
 
 	public void setNaciniPlacanja(List<NacinPlacanja> naciniPlacanja) {
 		this.naciniPlacanja = naciniPlacanja;
+	}
+
+	public List<Rad> getRad() {
+		return rad;
+	}
+
+	public void setRad(List<Rad> rad) {
+		this.rad = rad;
 	}
 	
 	

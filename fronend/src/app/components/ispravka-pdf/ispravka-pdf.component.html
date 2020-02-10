@@ -1,0 +1,20 @@
+<div class="forma">
+  <h2>Ispravka loše formatiranog pdf-a</h2>
+  <form #f="ngForm" (ngSubmit)="onSubmit(f.value, f)" ngNativeValidate>
+  
+    <div *ngFor="let field of formFields" >
+        <label for={{field.id}}>{{field.label}}</label>
+  
+        <input type="text" name={{field.id}} ngModel  placeholder="{{field.defaultValue}}" *ngIf="field.type.name=='string' && field.id !='ispravka_pdfa'" [disabled]="field.validationConstraints[0].configuration">
+        <input name={{field.id}} ngModel  *ngIf="field.type.name=='string' && field.id =='ispravka_pdfa'" type="file" accept=".pdf"  (change)="handleFileInput($event.target.files)">
+        <input type="checkbox" name={{field.id}} ngModel  *ngIf="field.type.name=='boolean'">
+        <select name="field.id" *ngIf="field.type.name=='enum'">
+          <option *ngFor="let val of enumValues" value={{val}}>
+            {{field.type.values[val]}}
+          </option>
+        </select>
+    </div>
+    
+    <input type="submit" value="Potvrdi">
+  </form>
+</div>

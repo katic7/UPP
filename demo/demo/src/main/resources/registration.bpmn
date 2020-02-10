@@ -89,7 +89,7 @@
     <bpmn:sequenceFlow id="SequenceFlow_13spw2t" sourceRef="ExclusiveGateway_0dbjfuq" targetRef="Task_1u2y5ql">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${recezent == 'true'}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:userTask id="Task_1u2y5ql" name="Verifikacija recezenta" camunda:assignee="demo">
+    <bpmn:userTask id="Task_1u2y5ql" name="Verifikacija recezenta" camunda:candidateGroups="admin">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="Ime_kor" label="Ime korisnika" type="string" defaultValue="${ime}" />

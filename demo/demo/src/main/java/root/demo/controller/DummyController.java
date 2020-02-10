@@ -75,13 +75,30 @@ public class DummyController {
         return new FormFieldsDto(task.getId(), pi.getId(), properties);
     }
 	
+	@GetMapping(path = "/get/{str}/{usr}", produces = "application/json")  //da
+    public @ResponseBody FormFieldsDto startujTask(@PathVariable String str, @PathVariable String usr) {
+		ProcessInstance pi = runtimeService.startProcessInstanceByKey(str);
+		
+		Task task = taskService.createTaskQuery().processInstanceId(pi.getId()).list().get(0);
+		runtimeService.setVariable(task.getExecutionId(), "user", usr);
+		TaskFormData tfd = formService.getTaskFormData(task.getId());
+		List<FormField> properties = tfd.getFormFields();
+		for(FormField fp : properties) {
+			System.out.println(fp.getId() + fp.getType());
+		}
+		
+        return new FormFieldsDto(task.getId(), pi.getId(), properties);
+    }
+	
 	@GetMapping(path = "/getMyTasks/{username}", produces = "application/json") //getujem taskove za npr admina
 	public @ResponseBody ResponseEntity<List<TaskDto>> getMyTasks(@PathVariable String username){
 		List<Task> tasks = new ArrayList<Task>();
 		tasks.addAll(taskService.createTaskQuery().processDefinitionKey("registracija").taskAssignee(username).list());
 		tasks.addAll(taskService.createTaskQuery().processDefinitionKey("kreiranje_casopisa").taskAssignee(username).list());
-		
+		tasks.addAll(taskService.createTaskQuery().processDefinitionKey("obrada_teksta").taskAssignee(username).list());
+		//PROBAJtaskService.createTaskQuery().processDefinitionId("").taskCandidateGroup("dsa");
 		List<TaskDto> taskDTO = new ArrayList<TaskDto>();
+		System.out.println(taskDTO.size() + "SIZEEEEEEEE");
 		for(Task task : tasks) {
 			TaskDto ts = new TaskDto(task.getId(), task.getName(), task.getAssignee());
 			taskDTO.add(ts);
@@ -116,10 +133,22 @@ public class DummyController {
         return new FormFieldsDto(task.getId(), id, properties);
     }
 	
+	@GetMapping(path = "/getUserTask2/{id}", produces = "application/json")  
+    public @ResponseBody FormFieldsDto getOneTask(@PathVariable String id) {
+		Task task = taskService.createTaskQuery().taskId(id).singleResult();
+		TaskFormData tfData = formService.getTaskFormData(task.getId());
+		
+		List<FormField> properites = tfData.getFormFields();
+		
+		return new FormFieldsDto(task.getId(),task.getProcessInstanceId(),properites);
+	}
+	
 	@PostMapping(path = "/post/{taskId}/{str}", produces = "application/json")
     public @ResponseBody ResponseEntity post(@RequestBody List<FormSubmissionDto> dto, @PathVariable String taskId, @PathVariable String str) {
 		HashMap<String, Object> map = this.mapListToDto(dto);
+			System.out.println(dto.size() + "VELICINA LISTE");
 		
+			System.out.println(str + "STR");
 		    // list all running/unsuspended instances of the process
 //		    ProcessInstance processInstance =
 //		        runtimeService.createProcessInstanceQuery()

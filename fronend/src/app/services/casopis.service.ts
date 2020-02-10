@@ -40,4 +40,16 @@ export class CasopisService {
   pregledCas(user, taskId):Observable<any> {
     return this.http.post("http://localhost:8080/welcome/post/"+taskId +'/sacuvajCas', user);
   }
+
+  getAll():Observable<any>{
+    return this.http.get("http://localhost:8080/casopis/getAll");
+  }
+
+  odabirCasopisa(cas, taskId):Observable<any>{
+    return this.http.post("http://localhost:8080/welcome/post/"+taskId + "/odabirCas",cas);
+  }
+
+  startKreirajRad(str,usr):Observable<any> {
+    return this.http.get("http://localhost:8080/welcome/get/"+str + "/"+usr);
+  }
 }

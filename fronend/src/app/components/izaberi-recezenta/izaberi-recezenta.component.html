@@ -1,0 +1,28 @@
+<div class="forma">
+  <h3 style="margin-bottom: 15px;">Unos recezenata</h3>
+  <form #f="ngForm" (ngSubmit)="onSubmit(f.value, f)" ngNativeValidate>
+  
+    <div *ngFor="let field of formFields" >
+      <table>
+        <tr>
+          <td style="width: 200px;">
+        <label for={{field.id}}>{{field.label}}</label>
+      </td>
+      <td style="width: auto;">
+        <input type="text" name={{field.id}} ngModel  *ngIf="field.type.name=='string' && field.id !='pdf'" >
+        <input name={{field.id}} ngModel  *ngIf="field.type.name=='string' && field.id =='pdf'" type="file" accept=".pdf"  (change)="handleFileInput($event.target.files)">
+        <input type="checkbox" name={{field.id}} ngModel  *ngIf="field.type.name=='boolean'">
+        <input type="number" name={{field.id}} ngModel  *ngIf="field.type.name=='long'">
+        <div *ngIf="field.type.name=='enum'" >
+          <ng-multiselect-dropdown name={{field.id}} [placeholder]="'Izaberite dva recezenta'" [data]="dropDownList" ngModel [settings]="dropdownSettings"
+                  (onDeSelect)="onItemDeSelect($event,field.type.name)" (onSelect)="onItemSelect($event,field.type.name)" value=selectedItems (onSelectAll)="onSelectAll($event,field.type.name)"
+          ></ng-multiselect-dropdown>
+      </div>
+      </td>
+    
+  </tr>
+  </table>
+</div>
+    <input type="submit" value="Potvrdi">
+  </form>
+</div>

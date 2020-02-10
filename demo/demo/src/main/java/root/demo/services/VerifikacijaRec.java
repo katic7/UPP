@@ -8,10 +8,13 @@ import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import root.demo.dto.FormSubmissionDto;
 import root.demo.model.Korisnik;
+import root.demo.model.Role;
+import root.demo.model.RoleName;
 import root.demo.model.Roles;
 import root.demo.repository.KorisnikRepository;
 import root.demo.repository.RoleRepository;
@@ -32,7 +35,7 @@ public class VerifikacijaRec implements JavaDelegate{
 	public void execute(DelegateExecution execution) throws Exception {
 		String processInstanceId = execution.getProcessInstanceId();
 		String email = "";
-		Set<Roles> roles = new HashSet<Roles>();
+		Set<Role> roles = new HashSet<Role>();
 		boolean bol = false;
 		Korisnik kor = new Korisnik();
 		List<FormSubmissionDto> registration = (List<FormSubmissionDto>)execution.getVariable("odobriRec");
@@ -46,10 +49,12 @@ public class VerifikacijaRec implements JavaDelegate{
 				}
 			}
 		}
-		kor = korRepo.findOneByEmail(email);
+		final String ml = email;
+		kor = korRepo.findByEmail(email)
+				.orElseThrow(() -> new UsernameNotFoundException("Korisnik not found with email: " + ml));
 		roles = kor.getRoles();
 		if(bol) {
-			roles.add(roleRepo.getRoleByName("RECEZENT"));
+			roles.add(roleRepo.findByName(RoleName.REVIEWER));
 		}
 		kor.setRoles(roles);
 		System.out.println(kor.getEmail()+"MAIL!!");
